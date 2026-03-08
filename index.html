@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>艺美画室 | 2026春季美术招生</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif; 
+      background: #f8f9fa; 
+      color: #333; 
+      line-height: 1.6;
+      touch-action: manipulation;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 0 16px; }
+
+    /* 页眉 */
+    header {
+      text-align: center;
+      padding: 24px 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .logo { font-size: 24px; font-weight: bold; color: #50e3c2; }
+    .logo-icon { margin-right: 8px; }
+
+    /* 招生核心信息 */
+    .info-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .info-card h2 {
+      color: #2c3e50;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 20px;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed #eee;
+    }
+    .info-icon { 
+      color: #50e3c2; 
+      font-size: 20px; 
+      margin-right: 12px;
+      min-width: 24px;
+    }
+    .info-text { 
+      flex: 1;
+      font-size: 15px;
+    }
+    .info-text strong { 
+      color: #2c3e50; 
+      font-weight: 600;
+    }
+
+    /* 作品集：使用箭头按钮切换 */
+    .gallery-section {
+      margin: 20px 0;
+      position: relative;
+    }
+    .gallery-title {
+      margin-bottom: 12px;
+      color: #2c3e50;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+    .gallery-title i {
+      margin-right: 8px;
+      color: #50e3c2;
+    }
+    
+    /* 作品展示容器 - 保留原始宽高比 */
+    .gallery-container {
+      height: 320px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      background: #e9ecef;
+    }
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* 保留原始宽高比 */
+      cursor: pointer;
+      transition: opacity 0.3s;
+      display: block;
+      margin: auto; /* 居中显示 */
+    }
+    
+    /* 箭头按钮 */
+    .gallery-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    .gallery-arrow:hover {
+      opacity: 1;
+    }
+    .arrow-left {
+      left: 16px;
+    }
+    .arrow-right {
+      right: 16px;
+    }
+    .arrow-hidden {
+      display: none;
+    }
+
+    /* 图片放大模态框 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+      opacity: 0.8;
+    }
+    .close-modal:hover {
+      opacity: 1;
+    }
+
+    /* 教师介绍 */
+    .teacher-section {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .teacher-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 16px;
+      border: 3px solid #50e3c2;
+    }
+    .teacher-name { 
+      text-align: center;
+      font-size: 18px;
+      color: #2c3e50;
+      margin-bottom: 6px;
+    }
+    .teacher-desc { 
+      color: #7f8c8d;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* 底部按钮 */
+    .cta-button {
+      display: block;
+      width: 100%;
+      background: #50e3c2;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(80, 227, 194, 0.4);
+      transition: background 0.3s;
+    }
+    .cta-button:hover { background: #40d3b2; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 页眉 -->
+    <header>
+      <div class="logo"><i class="fas fa-palette logo-icon"></i>艺美画室</div>
+      <p style="color: #7f8c8d; margin-top: 8px;">2026春季美术招生 | 专业启蒙 · 素描/水彩/油画</p>
+    </header>
+
+    <!-- 招生信息 -->
+    <section class="info-card">
+      <h2>招生关键信息</h2>
+      <div class="info-item">
+        <span class="info-icon"><i class="far fa-calendar-alt"></i></span>
+        <div class="info-text"><strong>开课时间：</strong>2026年3月20日（每周六 9:00-12:00）</div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon"><i class="fas fa-money-bill-wave"></i></span>
+        <div class="info-text"><strong>课程费用：</strong>2800元/期（含材料费）</div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon"><i class="fas fa-users"></i></span>
+        <div class="info-text"><strong>招生对象：</strong>8-15岁美术爱好者（限30人）</div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon"><i class="fas fa-phone"></i></span>
+        <div class="info-text"><strong>咨询电话：</strong>138-1234-5678</div>
+      </div>
+    </section>
+
+    <!-- 作品集：使用箭头按钮切换 -->
+    <div class="gallery-section">
+      <h3 class="gallery-title"><i class="fas fa-images"></i>教师作品集</h3>
+      <div class="gallery-container" id="gallery-container">
+        <!-- 左右箭头按钮 -->
+        <div class="gallery-arrow arrow-left" id="prev-btn">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="gallery-arrow arrow-right" id="next-btn">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        <!-- 主图片 - 保留原始宽高比 -->
+        <img class="gallery-img" id="main-img" src="https://s41.ax1x.com/2026/03/09/peiMRZ4.jpg" alt="教师作品">
+      </div>
+    </div>
+
+    <!-- 教师介绍 -->
+    <section class="teacher-section">
+      <img src="https://placehold.co/100x100?text=张老师" alt="张老师" class="teacher-img">
+      <div class="teacher-name">张明远老师</div>
+      <div class="teacher-desc">中央美院毕业 | 10年少儿美术教学经验 | 作品入选全国少儿美展</div>
+    </section>
+
+    <!-- 底部按钮 -->
+    <button class="cta-button">立即报名（限28席）</button>
+  </div>
+
+  <!-- 图片放大模态框 -->
+  <div class="modal" id="modal">
+    <span class="close-modal" id="close-modal">&times;</span>
+    <img class="modal-content" id="modal-img">
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 作品图片数据 (5张示例)
+      const galleryImages = [
+	"https://s41.ax1x.com/2026/03/09/peiM5J1.jpg",
+	"https://s41.ax1x.com/2026/03/09/peiM4iR.jpg",
+	"https://s41.ax1x.com/2026/03/09/peiMfo9.jpg",
+	"https://s41.ax1x.com/2026/03/09/peiMWdJ.jpg",
+	"https://s41.ax1x.com/2026/03/09/peiMRZ4.jpg",
+      ];
+
+      let currentIndex = 0;
+      const mainImg = document.getElementById('main-img');
+      const modalImg = document.getElementById('modal-img');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      
+      // 更新图片函数
+      function updateImage(index) {
+        currentIndex = index;
+        mainImg.src = galleryImages[currentIndex];
+        modalImg.src = galleryImages[currentIndex];
+        
+        // 更新箭头状态
+        updateArrowState();
+      }
+      
+      // 更新箭头状态（隐藏/显示）
+      function updateArrowState() {
+        // 第一张时隐藏左箭头
+        if (currentIndex === 0) {
+          prevBtn.classList.add('arrow-hidden');
+        } else {
+          prevBtn.classList.remove('arrow-hidden');
+        }
+        
+        // 最后一张时隐藏右箭头
+        if (currentIndex === galleryImages.length - 1) {
+          nextBtn.classList.add('arrow-hidden');
+        } else {
+          nextBtn.classList.remove('arrow-hidden');
+        }
+      }
+      
+      // 初始化
+      updateImage(0);
+      
+      // 点击上一张
+      prevBtn.addEventListener('click', function() {
+        if (currentIndex > 0) {
+          updateImage(currentIndex - 1);
+        }
+      });
+      
+      // 点击下一张
+      nextBtn.addEventListener('click', function() {
+        if (currentIndex < galleryImages.length - 1) {
+          updateImage(currentIndex + 1);
+        }
+      });
+      
+      // 图片放大功能
+      const modal = document.getElementById('modal');
+      const closeModal = document.getElementById('close-modal');
+      
+      if (mainImg && modal && modalImg && closeModal) {
+        mainImg.addEventListener('click', function() {
+          modal.style.display = 'flex';
+          modalImg.src = this.src;
+          modalImg.style.transform = 'scale(1)';
+        });
+        
+        closeModal.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
+        
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+        
+        modalImg.addEventListener('dblclick', function() {
+          if (this.style.transform === 'scale(1)') {
+            this.style.transform = 'scale(1.2)';
+          } else {
+            this.style.transform = 'scale(1)';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
